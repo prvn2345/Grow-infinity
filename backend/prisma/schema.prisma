@@ -1,0 +1,146 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  PARENT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String?  @unique
+  email     String   @unique
+  password  String
+  phoneNo   String?
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacherProfile TeacherProfile?
+  parentProfile  ParentProfile?
+  messagesSent     Message[] @relation("Sender")
+  messagesReceived Message[] @relation("Receiver")
+  notifications    Notification[]
+  reviewsWritten   Review[]
+  complaints       Complaint[]
+}
+
+model TeacherProfile {
+  id             String   @id @default(uuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  fullName       String
+  qualifications String[]
+  experience     Int?     // years
+  location       String?
+  hourlyFee      Float?
+  teachingMode   String[] // Online, Offline
+  documentsUrl   String[]
+  demoLectureUrl String?
+  group          String?
+  subGroup       String?
+  isVerified     Boolean  @default(false)
+  isApproved     Boolean  @default(false)
+  hasActiveSub   Boolean  @default(false)
+  
+  subjects       TeacherSubject[]
+  reviews        Review[]
+  selections     TeacherSelection[]
+}
+
+model ParentProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  fullName        String
+  childName       String?
+  childClass      String?
+  location        String?
+  budget          Float?
+  preferredTiming String?
+  teachingMode    String[] // Online, Offline
+  group           String?
+  subGroup        String?
+  
+  selections      TeacherSelection[]
+}
+
+model Subject {
+  id        String @id @default(uuid())
+  name      String @unique
+  teachers  TeacherSubject[]
+}
+
+model TeacherSubject {
+  teacherId String
+  subjectId String
+  teacher   TeacherProfile @relation(fields: [teacherId], references: [id])
+  subject   Subject        @relation(fields: [subjectId], references: [id])
+  @@id([teacherId, subjectId])
+}
+
+model TeacherSelection {
+  id           String @id @default(uuid())
+  parentId     String
+  parent       ParentProfile @relation(fields: [parentId], references: [id])
+  teacherId    String
+  // We can just keep teacherId or relate to TeacherProfile.
+  // Actually, better to relate to TeacherProfile
+  teacher        TeacherProfile @relation(fields: [teacherId], references: [id], map: "SelectionTeacherProfile")
+  
+  status       String // PENDING, ACCEPTED, REJECTED
+  paymentType  String // OWN_RISK, PLATFORM_PAY
+  paymentId    String? 
+  createdAt    DateTime @default(now())
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  content    String
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("Sender", fields: [senderId], references: [id])
+  receiver User @relation("Receiver", fields: [receiverId], references: [id])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  teacherId  String
+  reviewerId String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  teacher  TeacherProfile @relation(fields: [teacherId], references: [id])
+  reviewer User           @relation(fields: [reviewerId], references: [id])
+}
+
+model Complaint {
+  id          String   @id @default(uuid())
+  userId      String
+  description String
+  status      String   @default("OPEN") // OPEN, RESOLVED
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
