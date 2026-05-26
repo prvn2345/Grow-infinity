@@ -17,10 +17,10 @@ router.post(
   async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       const { fullName, qualifications, experience, location, hourlyFee, teachingMode, subjects } = req.body;
-      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
       
-      const documentsUrl = files['documents']?.map(file => file.path) || [];
-      const demoLectureUrl = files['demoLecture']?.[0]?.path || null;
+      const documentsUrl = files?.['documents']?.map(file => file.path) || [];
+      const demoLectureUrl = files?.['demoLecture']?.[0]?.path || null;
 
       const parseJsonArray = (val: any) => {
         if (!val) return [];
