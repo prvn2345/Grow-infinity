@@ -8,7 +8,21 @@ const router = Router();
 router.post('/profile', authenticate, authorizeRole(['PARENT']), async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { fullName, childClass, location, budget, preferredTiming, teachingMode } = req.body;
-    const parsedTeachingMode = typeof teachingMode === 'string' ? JSON.parse(teachingMode) : teachingMode;
+    
+    const parseJsonArray = (val: any) => {
+      if (!val) return [];
+      if (typeof val === 'string') {
+        try {
+          const parsed = JSON.parse(val);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+          return val.trim() ? [val] : [];
+        }
+      }
+      return Array.isArray(val) ? val : [val];
+    };
+
+    const parsedTeachingMode = parseJsonArray(teachingMode);
 
     const profile = await prisma.parentProfile.upsert({
       where: { userId: req.user!.id },
@@ -16,7 +30,7 @@ router.post('/profile', authenticate, authorizeRole(['PARENT']), async (req: Aut
         fullName,
         childClass,
         location,
-        budget: parseFloat(budget),
+        budget: parseFloat(budget) || 0,
         preferredTiming,
         teachingMode: parsedTeachingMode
       },
@@ -25,7 +39,7 @@ router.post('/profile', authenticate, authorizeRole(['PARENT']), async (req: Aut
         fullName,
         childClass,
         location,
-        budget: parseFloat(budget),
+        budget: parseFloat(budget) || 0,
         preferredTiming,
         teachingMode: parsedTeachingMode
       }

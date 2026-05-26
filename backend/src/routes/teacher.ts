@@ -22,9 +22,22 @@ router.post(
       const documentsUrl = files['documents']?.map(file => file.path) || [];
       const demoLectureUrl = files['demoLecture']?.[0]?.path || null;
 
-      const parsedQualifications = typeof qualifications === 'string' ? JSON.parse(qualifications) : qualifications;
-      const parsedTeachingMode = typeof teachingMode === 'string' ? JSON.parse(teachingMode) : teachingMode;
-      const parsedSubjects = typeof subjects === 'string' ? JSON.parse(subjects) : subjects; // Array of subject names
+      const parseJsonArray = (val: any) => {
+        if (!val) return [];
+        if (typeof val === 'string') {
+          try {
+            const parsed = JSON.parse(val);
+            return Array.isArray(parsed) ? parsed : [parsed];
+          } catch {
+            return val.trim() ? [val] : [];
+          }
+        }
+        return Array.isArray(val) ? val : [val];
+      };
+
+      const parsedQualifications = parseJsonArray(qualifications);
+      const parsedTeachingMode = parseJsonArray(teachingMode);
+      const parsedSubjects = parseJsonArray(subjects); // Array of subject names
       
       // Ensure subjects exist
       const subjectRecords = await Promise.all(
@@ -41,11 +54,11 @@ router.post(
         where: { userId: req.user!.id },
         update: {
           fullName,
-          qualifications: parsedQualifications,
-          experience: parseInt(experience),
+          ...(parsedQualifications.length && { qualifications: parsedQualifications }),
+          experience: parseInt(experience) || 0,
           location,
-          hourlyFee: parseFloat(hourlyFee),
-          teachingMode: parsedTeachingMode,
+          hourlyFee: parseFloat(hourlyFee) || 0,
+          ...(parsedTeachingMode.length && { teachingMode: parsedTeachingMode }),
           ...(documentsUrl.length && { documentsUrl }),
           ...(demoLectureUrl && { demoLectureUrl })
         },
@@ -53,9 +66,9 @@ router.post(
           userId: req.user!.id,
           fullName,
           qualifications: parsedQualifications,
-          experience: parseInt(experience),
+          experience: parseInt(experience) || 0,
           location,
-          hourlyFee: parseFloat(hourlyFee),
+          hourlyFee: parseFloat(hourlyFee) || 0,
           teachingMode: parsedTeachingMode,
           documentsUrl,
           demoLectureUrl
