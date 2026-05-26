@@ -34,10 +34,15 @@ export default function TeacherDashboard() {
     }
 
     try {
-      // 1. Get profile details
-      const profileRes = await fetch(`${API_BASE_URL}/api/teachers/profile`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
+      const headers = { "Authorization": `Bearer ${token}` };
+      
+      // Fire all three requests in parallel
+      const [profileRes, selectionsRes, notifRes] = await Promise.all([
+        fetch(`${API_BASE_URL}/api/teachers/profile`, { headers }),
+        fetch(`${API_BASE_URL}/api/teachers/selections`, { headers }),
+        fetch(`${API_BASE_URL}/api/notifications`, { headers })
+      ]);
+
       if (profileRes.status === 404) {
         // Redirection to profile setup
         router.push("/dashboard/teacher/setup");
@@ -50,19 +55,11 @@ export default function TeacherDashboard() {
         setDemoUrl(profileData.demoLectureUrl);
       }
 
-      // 2. Get selections (Inquiries)
-      const selectionsRes = await fetch(`${API_BASE_URL}/api/teachers/selections`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
       if (selectionsRes.ok) {
         const selData = await selectionsRes.json();
         setSelectionsData(selData);
       }
 
-      // 3. Get notifications
-      const notifRes = await fetch(`${API_BASE_URL}/api/notifications`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
       if (notifRes.ok) {
         const notifData = await notifRes.json();
         setNotifications(notifData);

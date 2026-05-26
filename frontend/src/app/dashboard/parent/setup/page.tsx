@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../../../../lib/config";
 
 export default function ParentSetup() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function ParentSetup() {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/parents/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/parents/profile`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../../../../lib/config";
 
 export default function TeacherSetup() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function TeacherSetup() {
     // File uploads omitted for simplicity in this basic setup
     
     try {
-      const res = await fetch("http://localhost:5000/api/teachers/profile", {
+      const res = await fetch(`${API_BASE_URL}/api/teachers/profile`, {
         method: "POST",
         headers: { "Authorization": `Bearer ${token}` },
         body: fd
