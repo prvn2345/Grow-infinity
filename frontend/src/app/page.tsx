@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "../lib/config";
 
 export default function Home() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function Home() {
         payload.teacherDetails = { fullName, group, qualifications, subjects: selectedSubjects };
       }
 
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -71,7 +72,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Registration failed");
 
-      const loginRes = await fetch("http://localhost:5000/api/auth/login", {
+      const loginRes = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

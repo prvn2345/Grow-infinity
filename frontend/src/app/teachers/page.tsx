@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loadRazorpay } from "../../lib/razorpay";
+import { API_BASE_URL } from "../../lib/config";
 
 export default function TeachersList() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function TeachersList() {
       if (minFeeInput) params.append("minFee", minFeeInput);
       if (maxFeeInput) params.append("maxFee", maxFeeInput);
 
-      const res = await fetch(`http://localhost:5000/api/teachers?${params.toString()}`, {
+      const res = await fetch(`${API_BASE_URL}/api/teachers?${params.toString()}`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {
@@ -73,7 +74,7 @@ export default function TeachersList() {
 
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:5000/api/parents/select", {
+      const res = await fetch(`${API_BASE_URL}/api/parents/select`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,7 +118,7 @@ export default function TeachersList() {
 
     try {
       // 1. Create a selection record as PLATFORM_PAY first (status is PENDING)
-      const selectionRes = await fetch("http://localhost:5000/api/parents/select", {
+      const selectionRes = await fetch(`${API_BASE_URL}/api/parents/select`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +136,7 @@ export default function TeachersList() {
       const selectionId = selectionData.selection.id;
 
       // 2. Create Razorpay order for parent verification fee (₹299 platform security fee)
-      const orderRes = await fetch("http://localhost:5000/api/payments/order", {
+      const orderRes = await fetch(`${API_BASE_URL}/api/payments/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -158,7 +159,7 @@ export default function TeachersList() {
         handler: async function (response: any) {
           try {
             // Verify Payment (updates selection status to ACCEPTED)
-            const verifyRes = await fetch("http://localhost:5000/api/payments/verify", {
+            const verifyRes = await fetch(`${API_BASE_URL}/api/payments/verify`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

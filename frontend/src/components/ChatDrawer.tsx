@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { API_BASE_URL } from "../lib/config";
 
 interface Message {
   id: string;
@@ -30,7 +31,7 @@ export default function ChatDrawer({ receiverId, receiverName, onClose }: ChatDr
   const fetchMessages = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/messages/${receiverId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/messages/${receiverId}`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }
@@ -70,7 +71,7 @@ export default function ChatDrawer({ receiverId, receiverName, onClose }: ChatDr
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch("http://localhost:5000/api/messages", {
+      const res = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

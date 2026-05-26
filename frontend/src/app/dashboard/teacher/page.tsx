@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loadRazorpay } from "../../../lib/razorpay";
+import { API_BASE_URL } from "../../../lib/config";
 import ChatDrawer from "../../../components/ChatDrawer";
 
 export default function TeacherDashboard() {
@@ -34,7 +35,7 @@ export default function TeacherDashboard() {
 
     try {
       // 1. Get profile details
-      const profileRes = await fetch("http://localhost:5000/api/teachers/profile", {
+      const profileRes = await fetch(`${API_BASE_URL}/api/teachers/profile`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (profileRes.status === 404) {
@@ -50,7 +51,7 @@ export default function TeacherDashboard() {
       }
 
       // 2. Get selections (Inquiries)
-      const selectionsRes = await fetch("http://localhost:5000/api/teachers/selections", {
+      const selectionsRes = await fetch(`${API_BASE_URL}/api/teachers/selections`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (selectionsRes.ok) {
@@ -59,7 +60,7 @@ export default function TeacherDashboard() {
       }
 
       // 3. Get notifications
-      const notifRes = await fetch("http://localhost:5000/api/notifications", {
+      const notifRes = await fetch(`${API_BASE_URL}/api/notifications`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (notifRes.ok) {
@@ -89,7 +90,7 @@ export default function TeacherDashboard() {
   const handleMarkNotificationRead = async (id: string) => {
     const token = localStorage.getItem("token");
     try {
-      await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+      await fetch(`${API_BASE_URL}/api/notifications/${id}/read`, {
         method: "PUT",
         headers: { "Authorization": `Bearer ${token}` }
       });
@@ -119,7 +120,7 @@ export default function TeacherDashboard() {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/api/teachers/demo-lecture", {
+      const res = await fetch(`${API_BASE_URL}/api/teachers/demo-lecture`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -154,7 +155,7 @@ export default function TeacherDashboard() {
 
     try {
       // Create Razorpay Order in Backend
-      const orderRes = await fetch("http://localhost:5000/api/payments/order", {
+      const orderRes = await fetch(`${API_BASE_URL}/api/payments/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,7 +177,7 @@ export default function TeacherDashboard() {
         handler: async function (response: any) {
           try {
             // Verify Payment
-            const verifyRes = await fetch("http://localhost:5000/api/payments/verify", {
+            const verifyRes = await fetch(`${API_BASE_URL}/api/payments/verify`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",

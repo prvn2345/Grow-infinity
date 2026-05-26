@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loadRazorpay } from "../../../lib/razorpay";
+import { API_BASE_URL } from "../../../lib/config";
 import ChatDrawer from "../../../components/ChatDrawer";
 
 export default function ParentDashboard() {
@@ -26,7 +27,7 @@ export default function ParentDashboard() {
 
     try {
       // Get parent selections
-      const res = await fetch("http://localhost:5000/api/parents/selections", {
+      const res = await fetch(`${API_BASE_URL}/api/parents/selections`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.status === 400) {
@@ -70,7 +71,7 @@ export default function ParentDashboard() {
 
     try {
       // Create Razorpay order for platform security fee (₹299)
-      const orderRes = await fetch("http://localhost:5000/api/payments/order", {
+      const orderRes = await fetch(`${API_BASE_URL}/api/payments/order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,7 +93,7 @@ export default function ParentDashboard() {
         handler: async function (response: any) {
           try {
             // Verify Payment (updates selection status to ACCEPTED)
-            const verifyRes = await fetch("http://localhost:5000/api/payments/verify", {
+            const verifyRes = await fetch(`${API_BASE_URL}/api/payments/verify`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
