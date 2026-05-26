@@ -232,21 +232,21 @@ export default function TeacherDashboard() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans pb-12">
       {/* Navbar */}
-      <nav className="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center shadow-lg w-full">
-        <div className="flex items-center space-x-2">
-          <Link href="/" className="inline-flex items-center space-x-2">
-            <svg className="w-8 h-8 text-orange-500 animate-pulse" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+      <nav className="bg-slate-900 border-b border-slate-800 px-4 py-3 md:px-6 md:py-4 flex justify-between items-center shadow-lg w-full">
+        <div className="flex items-center space-x-1.5 md:space-x-2 min-w-0">
+          <Link href="/" className="inline-flex items-center space-x-1.5 md:space-x-2 min-w-0">
+            <svg className="w-6 h-6 md:w-8 md:h-8 text-orange-500 flex-shrink-0 animate-pulse" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 12C10.7951 10.1537 9.2049 9 7.5 9c-2.4853 0-4.5 1.3431-4.5 3s2.0147 3 4.5 3c1.7049 0 3.2951-1.1537 4.5-3zm0 0c1.2049-1.1537 2.7951-2 4.5-2 2.4853 0 4.5 1.3431 4.5 3s-2.0147 3-4.5 3c-1.7049 0-3.2951-1.1537-4.5-3z" />
             </svg>
-            <span className="text-2xl font-black bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">Grow Infinity</span>
+            <span className="text-lg md:text-2xl font-black bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent truncate">Grow Infinity</span>
           </Link>
-          <span className="bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase border border-slate-700">Teacher Panel</span>
+          <span className="hidden sm:inline-block bg-slate-800 text-slate-400 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border border-slate-700 flex-shrink-0">Teacher Panel</span>
         </div>
-        <div className="flex items-center space-x-6">
-          <span className="text-slate-300 font-semibold text-sm hidden md:inline">Welcome, {profile?.fullName}</span>
+        <div className="flex items-center space-x-2 md:space-x-6 flex-shrink-0">
+          <span className="text-slate-300 font-semibold text-xs md:text-sm hidden md:inline truncate max-w-[150px]">Welcome, {profile?.fullName}</span>
           <button 
             onClick={handleLogout}
-            className="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-sm font-semibold transition"
+            className="bg-slate-800 border border-slate-700 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-bold transition flex-shrink-0 cursor-pointer"
           >
             Logout
           </button>

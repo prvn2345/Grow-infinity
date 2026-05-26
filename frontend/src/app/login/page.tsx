@@ -41,19 +41,19 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-orange-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-orange-500 flex flex-col justify-center p-4 py-12 sm:px-6 lg:px-8 font-sans">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center flex flex-col items-center">
-        <Link href="/" className="inline-flex items-center space-x-2 text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
-          <svg className="w-10 h-10 text-orange-500 animate-pulse" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+        <Link href="/" className="inline-flex items-center space-x-2 text-3xl md:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
+          <svg className="w-8 h-8 md:w-10 md:h-10 text-orange-500 animate-pulse" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 12C10.7951 10.1537 9.2049 9 7.5 9c-2.4853 0-4.5 1.3431-4.5 3s2.0147 3 4.5 3c1.7049 0 3.2951-1.1537 4.5-3zm0 0c1.2049-1.1537 2.7951-2 4.5-2 2.4853 0 4.5 1.3431 4.5 3s-2.0147 3-4.5 3c-1.7049 0-3.2951-1.1537-4.5-3z" />
           </svg>
           <span>Grow Infinity</span>
         </Link>
-        <h2 className="mt-4 text-xl font-medium text-blue-100">Sign in to your dashboard</h2>
+        <h2 className="mt-4 text-lg md:text-xl font-medium text-blue-100">Sign in to your dashboard</h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-10 px-8 shadow-2xl rounded-3xl border border-slate-100">
+        <div className="bg-white py-8 px-5 sm:py-10 sm:px-8 shadow-2xl rounded-3xl border border-slate-100">
           <form className="space-y-6" onSubmit={handleLogin}>
             {error && (
               <div className="bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 flex items-center font-medium text-sm">
