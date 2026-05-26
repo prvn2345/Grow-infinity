@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "../lib/config";
+import { API_BASE_URL } from "../../lib/config";
 
 export default function Login() {
   const router = useRouter();
